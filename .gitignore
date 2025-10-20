@@ -1,0 +1,4 @@
+# ignore any .env files throughout the project
+*.env
+.vagrant/
+.DS_Store
