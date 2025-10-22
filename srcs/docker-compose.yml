@@ -11,11 +11,6 @@ services:
     volumes:
       - db:/var/lib/mysql
     restart: always
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${SQL_ROOT_PASSWORD}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
   
   wordpress:
     container_name: wordpress
@@ -24,8 +19,7 @@ services:
     networks:
       - inception
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     expose:
       - "9000"
     volumes:
@@ -44,6 +38,7 @@ services:
       - phpmyadmin
     ports:
       - "443:443"
+      - "80:80"
     volumes:
       - wp:/var/www/rel-fila/wordpress
     env_file: .env
@@ -55,13 +50,11 @@ services:
     networks:
       - inception
     depends_on:
-      mariadb:
-        condition: service_healthy
+      - mariadb
     environment:
       PMA_HOST: mariadb
       PMA_USER: ${SQL_USER}
       PMA_PASSWORD: ${SQL_PASSWORD}
-      PMA_ARBITRARY: 1
     restart: always
     expose:
       - "5000"

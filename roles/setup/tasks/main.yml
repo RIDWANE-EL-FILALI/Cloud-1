@@ -1,0 +1,25 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - docker.io
+      - docker-compose
+      - make
+    state: present
+    update_cache: yes
+
+- name: Copy srcs directory
+  copy:
+    src: ./../../../srcs/
+    dest: /root/srcs/
+
+- name: Copy .env file
+  copy:
+    src: ./../../../.env
+    dest: /root/srcs/.env
+
+- name: Update DOMAIN_NAME in .env to match server IP
+  replace:
+    path: /root/srcs/.env
+    regexp: '^DOMAIN_NAME=.*$'
+    replace: "DOMAIN_NAME=https://{{ ansible_host }}"

@@ -1,0 +1,5 @@
+---
+- name: Run make to deploy containers
+  command: make
+  args:
+    chdir: /root/srcs/
